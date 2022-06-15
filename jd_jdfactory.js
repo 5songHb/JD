@@ -11,7 +11,7 @@
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#东东工厂
+#东东工厂-备份版本
 10 0,6-23 * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
 
 ================Loon==============
@@ -269,7 +269,7 @@ async function doTask() {
           console.log(`${item.taskName}已做完`)
         }
       }
-      if (item.taskType === 2) {
+      if (item.taskType === 15) {
         //看看商品任务
         if (item.status === 1) {
           console.log(`准备做此任务：${item.taskName}`);
@@ -301,10 +301,14 @@ async function doTask() {
           console.log(`准备做此任务：${item.taskName}`);
           for (let task of item.shoppingActivityVos) {
             if (task.status === 1) {
-              await queryVkComponent();
               await jdfactory_collectScore(task.taskToken);
             }
           }
+          for (let task of item.shoppingActivityVos) {
+            if (task.status === 1) {
+              await jdfactory_collectScore_time(task.taskToken);
+            }
+          }    
         } else {
           console.log(`${item.taskName}已做完`)
         }
@@ -325,12 +329,14 @@ async function doTask() {
       if (item.taskType === 21) {
         //开通会员任务
         if (item.status === 1) {
-          console.log(`此任务：${item.taskName}，跳过`);
-          // for (let task of item.brandMemberVos) {
-          //   if (task.status === 1) {
-          //     await jdfactory_collectScore(task.taskToken);
-          //   }
-          // }
+          console.log(`准备做此任务：${item.taskName}`);
+          for (let task of item.brandMemberVos) {
+            if (task.status === 1) {
+              vendorIds = task.vendorIds;
+              bindWithVender(vendorIds);
+              await jdfactory_collectScore(task.taskToken);
+            }
+          }
         } else {
           console.log(`${item.taskName}已做完`)
         }
@@ -369,6 +375,27 @@ async function doTask() {
       }
     }
   }
+}
+
+function jdfactory_collectScore_time(taskToken) {
+  actionType = "1";
+  return new Promise(async resolve => {
+    await $.wait(1000);
+    $.post(taskPostUrl("jdfactory_collectScore", { taskToken, actionType }, "jdfactory_collectScore"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          console.log(JSON.stringify(data))
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
 }
 
 //领取做完任务的奖励
@@ -548,6 +575,47 @@ function queryVkComponent() {
     })
   })
 }
+
+function bindWithVender(venderId){
+   console.log(`bindWithVender venderId is: ${venderId}`)
+   return new Promise(resolve =>{
+     $.get(taskVenderUrl('bindWithVender', {"venderId":venderId,"shopId":venderId,"bindByVerifyCodeFlag":1,"writeChildFlag":0,"channel":4202,"registerExtend":{"v_name":"张女士","v_sex":"女","v_birthday":"1988-06-06","v_email":"test@hotmail.com"}}), async (err, resp, data) => {
+       try{
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} bindWithVender API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+          }
+        }
+       } catch(e){
+         $.logErr(e, resp)
+       } finally {
+         resolve();
+       }
+     })
+   })
+}
+
+function taskVenderUrl(function_id, body = {}) {
+  console.log(`taskVenderUrl is :`)
+  console.log(`${JD_API_HOST}client.action?functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=jd_shop_member&client=H5`)
+  return {
+    url: `${JD_API_HOST}client.action?functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=jd_shop_member&client=H5`,
+    headers: {
+      'Cookie': cookie,
+      'Host': 'api.m.jd.com',
+      'Accept': '*/*',
+      'Connection': 'keep-alive',
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Accept-Language': 'zh-cn',
+      'Accept-Encoding': 'gzip, deflate, br',
+      "Referer": "https://shopmember.m.jd.com/shopcard/"
+    }
+  }
+}
+
 //查询当前商品列表
 function jdfactory_getProductList(flag = false) {
   return new Promise(resolve => {
