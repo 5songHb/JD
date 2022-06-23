@@ -12,17 +12,17 @@
 ============Quantumultx===============
 [task_local]
 #东东工厂-备份版本
-15 */1 * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
+15 * * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "15 */1 * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js,tag=东东工厂
+cron "15 * * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js,tag=东东工厂
 
 ===============Surge=================
-东东工厂 = type=cron,cronexp="15 */1 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js
+东东工厂 = type=cron,cronexp="15 * * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js
 
 ============小火箭=========
-东东工厂 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, cronexpr="15 */1 * * *", timeout=3600, enable=true
+东东工厂 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, cronexpr="15 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东工厂');
 
