@@ -87,6 +87,12 @@ async function jdFactory() {
     // $.newUser !==1 && $.haveProduct === 2，老用户但未选购商品
     // $.newUser === 1新用户
     if ($.newUser === 1) return
+    await jdfactory_getLotteryHomeData();// 获取抽奖信息
+    if ($.leftLotteryNum === 1){
+       await jdfactory_getLotteryResult();
+    }else{
+        console.log('今天免费抽奖已使用');
+    }
     await jdfactory_collectElectricity();//收集产生的电量
     await jdfactory_getTaskDetail();
     await doTask();
@@ -663,11 +669,59 @@ function sortCouponCount(a, b) {
 }
 
 function jdfactory_getLotteryResult(){
-
+  return new Promise(resolve => {
+    $.post(taskPostUrl('jdfactory_getLotteryResult'), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.data.bizCode === 0) {
+              if (data.data.result.userAwardDto) {
+                console.log(`东东工厂抽奖获取电力：${data.data.result.userAwardDto.jdfactoryScore}`) ;//剩余免费次数
+              }
+            } else {
+              console.log(`异常：${JSON.stringify(data)}`)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })    
 }
 
-function jdfactory_getLotteryData(){
-
+function jdfactory_getLotteryHomeData(){
+  return new Promise(resolve => {
+    $.post(taskPostUrl('jdfactory_getLotteryHomeData'), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.data.bizCode === 0) {
+              if (data.data.result.userInfo) {
+                $.leftLotteryNum = data.data.result.userInfo.leftLotteryNum;//剩余免费次数
+              }
+            } else {
+              console.log(`异常：${JSON.stringify(data)}`)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
 }
 
 function jdfactory_getHomeData() {
