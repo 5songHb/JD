@@ -661,6 +661,15 @@ function jdfactory_getProductList(flag = false) {
 function sortCouponCount(a, b) {
   return b['couponCount'] - a['couponCount']
 }
+
+function jdfactory_getLotteryResult(){
+
+}
+
+function jdfactory_getLotteryData(){
+
+}
+
 function jdfactory_getHomeData() {
   return new Promise(resolve => {
     $.post(taskPostUrl('jdfactory_getHomeData'), async (err, resp, data) => {
