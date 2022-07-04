@@ -1,0 +1,19 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # every 30 minutes
+  workflow_dispatch: # on button click
+
+jobs:
+  sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: glenq/fork-sync@v1.4
+        with:
+          token: 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
+          owner: glenq
+          base: master
+          head: master
