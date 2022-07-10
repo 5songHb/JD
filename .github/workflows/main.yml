@@ -2,7 +2,7 @@ name: Sync Fork
 
 on:
   schedule:
-    - cron: '*/1 * * * *' # every 30 minutes
+    - cron: '*/30 * * * *' # every 30 minutes
 
 jobs:
   sync:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: tgymnich/fork-sync@v1.4
+      - uses: tgymnich/fork-sync@v1.6.3
         with:
           token: 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
           owner: KingRan
