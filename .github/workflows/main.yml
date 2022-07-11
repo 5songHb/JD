@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: tgymnich/fork-sync@v1.6.3
         with:
-          token: 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
+          token: ${{ secrets.PERSONAL_TOKEN }}
           owner: KingRan
           base: master
           head: master
