@@ -275,7 +275,7 @@ async function doTask() {
           console.log(`${item.taskName}已做完`)
         }
       }
-      if (item.taskType === 15) {
+      if (item.taskType === 15 || item.taskType === 27) {
         //看看商品任务
         if (item.status === 1) {
           console.log(`准备做此任务：${item.taskName}`);
