@@ -74,6 +74,7 @@ $.newShareCode = [];
       await jdFactory()
     }
   }
+  await notify.sendNotify(`${$.name}`, `东东工厂运行一次`)
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
