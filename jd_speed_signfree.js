@@ -66,7 +66,7 @@ async function sign_all() {
     for (const order of $.signFreeOrderInfoList) {
         // console.debug('now:', order)
         $.productName = order.productName
-        await sign(order.orderId)
+        await sign(order.orderId, order.hasSignDays, order.needSignDays)
         await $.wait(3000)
     }
     await $.wait(3000)
@@ -90,7 +90,7 @@ function query() {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
                 } else {
-                    // console.debug('query:', data)
+                    console.log(`query data: ${JSON.stringify(data)}`);
                     data = JSON.parse(data)
                     $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
                     if (data.success == true) {
@@ -122,7 +122,7 @@ function query() {
     })
 }
 
-function sign(orderId) {
+function sign(orderId,hasSignDays,needSignDays) {
     return new Promise(resolve => {
         // console.debug('sign orderId:', orderId)
         $.post(taskPostUrl("signFreeSignIn", { "linkId": activityId, "orderId": orderId }), async (err, resp, data) => {
@@ -130,13 +130,14 @@ function sign(orderId) {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
                 } else {
-                    // console.debug('sign:', data)
+                    let percent = ` ${hasSignDays}/${needSignDays} 天`
+                    console.log(`sign data: ${JSON.stringify(data)}}`)
                     data = JSON.parse(data)
                     let msg_temp
                     if (data.success) {
-                        msg_temp = $.productName + ' 签到成功'
+                        msg_temp = $.productName + ' 签到成功' + percent
                     } else {
-                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误') + percent
                     }
                     console.log(msg_temp)
                     msg.push(msg_temp)
