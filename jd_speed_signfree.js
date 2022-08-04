@@ -90,7 +90,7 @@ function query() {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
                 } else {
-                    console.log(`query data: ${JSON.stringify(data)}`);
+                    //console.log(`query data: ${JSON.stringify(data)}`);
                     data = JSON.parse(data)
                     $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
                     if (data.success == true) {
@@ -130,8 +130,8 @@ function sign(orderId,hasSignDays,needSignDays) {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
                 } else {
-                    let percent = ` ${hasSignDays}/${needSignDays} 天`
-                    console.log(`sign data: ${JSON.stringify(data)}}`)
+                    let percent = ` ${hasSignDays + 1}/${needSignDays} 天`
+                    //console.log(`sign data: ${JSON.stringify(data)}}`)
                     data = JSON.parse(data)
                     let msg_temp
                     if (data.success) {
