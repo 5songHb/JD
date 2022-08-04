@@ -1,18 +1,17 @@
 name: Sync Fork
 
 on:
+  push: # push 时触发, 主要是为了测试配置有没有问题
   schedule:
-    - cron: '*/30 * * * *' # every 30 minutes
+    - cron: '* */1 * * *' # every 30 minutes
 
 jobs:
   sync:
-
     runs-on: ubuntu-latest
-
     steps:
-      - uses: tgymnich/fork-sync@v1.6.3
+      - uses: TG908/fork-sync@v1.6.3
         with:
-          token: ${{ secrets.JD_SYNC }}
-          owner: KingRan
-          base: master
-          head: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: KingRan # fork 的上游仓库 user
+          head: main # fork 的上游仓库 branch
+          base: main # 本地仓库 branch
