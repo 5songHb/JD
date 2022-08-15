@@ -25,7 +25,7 @@ cron "15 * * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/
 东东工厂 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js, cronexpr="15 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东工厂');
-
+var sd = require('silly-datetime');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -74,7 +74,7 @@ $.newShareCode = [];
       await jdFactory()
     }
   }
-  await notify.sendNotify(`${$.name}`, `东东工厂运行一次`)
+  await notify.sendNotify(`${$.name}`, `${sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`)
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
