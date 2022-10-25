@@ -12,7 +12,7 @@
 
 ================Loon==============
 [Script]
-cron "01 * * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js,tag=东东工厂-仅电量
+cron "01 0-7 * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js,tag=东东工厂-仅电量
 
 ===============Surge=================
 东东工厂 = type=cron,cronexp="15 * * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_jdfactory.js
