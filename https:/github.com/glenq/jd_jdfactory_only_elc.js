@@ -55,6 +55,7 @@ $.newShareCode = [];
         continue
       }
       await jdfactory_collectElectricity();//收集产生的电量
+       console.log(`3秒暂停`);
       await $.wait(3*1000);
     }
   }
@@ -66,7 +67,6 @@ $.newShareCode = [];
   .finally(() => {
     $.done();
   })
-
 
 //收集电量
 function jdfactory_collectElectricity() {
